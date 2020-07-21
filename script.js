@@ -6,10 +6,10 @@ const quizAllNum = 10;
 const startQuiz = () => {
 
 	fetch('https://opentdb.com/api.php?amount=10')
-	.then(function(response) {
+	.then((response) => {
 		return response.json();
 	})
-	.then(function(myJson) {
+	.then((myJson) => {
 		quizData = myJson.results;
 		questions(); //第1問目
 	});
@@ -79,26 +79,28 @@ const questions = () => {
 	//選択肢
 	const correctAnswer = quizData[quizNum-1].correct_answer;
 	let choices = [];
-	choices.push(correctAnswer);
+	choices.push(correctAnswer);	//正解を取り出す
 
-	for (i = 0; i < quizData[quizNum-1].incorrect_answers.length; i++) {
-		choices.push(quizData[quizNum-1].incorrect_answers[i]);
+	for (let i = 0; i < quizData[quizNum-1].incorrect_answers.length; i++) {
+		choices.push(quizData[quizNum-1].incorrect_answers[i]);	//不正解を取り出す
 	}
+	
 	
 	
 	
 	let choiceElementNode;
 	let choiceTextNode;
+	let randomArrayElements = randomArrayElementNo(choices.length);	//配列の要素Noで構成された乱数を取得
 	
-	for (j = 0; j <= i; j++)  {
+	for (let i = 0; i < randomArrayElements.length; i++)  {
 		choiceElementNode = document.createElement('button');
 		
-		if (choices[j] === correctAnswer) {
+		if (choices[randomArrayElements[i]] === correctAnswer) {
 			choiceElementNode.setAttribute('onclick', 'answerNum++; questions();');
 		} else {
 			choiceElementNode.setAttribute('onclick', 'questions();');
 		}
-		choiceTextNode = document.createTextNode(choices[j]);
+		choiceTextNode = document.createTextNode(choices[randomArrayElements[i]]);
 		choiceElementNode.appendChild(choiceTextNode);
 		buttons.appendChild(choiceElementNode);
 	}
@@ -123,3 +125,25 @@ const result = () => {
 	homeElementNode.appendChild(homeTextNode);
 	buttons.appendChild(homeElementNode);
 }
+
+
+const randomArrayElementNo = (choicesLength) => {	//取り出す要素Noを無作為に決定
+	
+	let randomArrayNo;
+	let returnArray = [];
+	let uncheckArrayElementNo = []
+	
+	for (let i = 0; i < choicesLength; i++) {	//要素Noで構成した配列を作成
+		uncheckArrayElementNo[i] = i;
+	}
+	
+	for (let i = uncheckArrayElementNo.length - 1; i >= 0; i--) {
+		randomArrayNo = Math.floor( Math.random() * uncheckArrayElementNo.length);
+		returnArray.push(uncheckArrayElementNo[randomArrayNo]);
+		uncheckArrayElementNo.splice(randomArrayNo, 1);	//取り出したものは削除して詰める
+	}
+	
+	return returnArray;
+}
+
+
