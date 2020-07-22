@@ -2,17 +2,17 @@ let quizData;
 let quizNum = 1;
 let answerNum = 0;
 const quizAllNum = 10;
-
 const startQuiz = () => {
 
 	fetch('https://opentdb.com/api.php?amount=10')
-	.then((response) => {
-		return response.json();
-	})
-	.then((myJson) => {
-		quizData = myJson.results;
-		questions(); //第1問目
-	});
+		.then((response) => {
+			return response.json();
+		})
+		.then((myJson) => {
+			quizData = myJson.results;
+			questions(); //第1問目
+		}
+	);
 	
 	const message = document.getElementById('message');
 	message.textContent = '取得中';
@@ -22,12 +22,8 @@ const startQuiz = () => {
 	
 	const startButton = document.getElementById('start-button');
 	startButton.setAttribute('style', 'display:none;');
-	
 }
-
 const questions = () => {
-
-
 	const header = document.getElementById('header');
 	const contents = document.getElementById('contents');
 	const buttons = document.getElementById('buttons');
@@ -49,7 +45,6 @@ const questions = () => {
 		result();
 		return;
 	}
-	
 	
 	//問題No.
 	const partElementNode = document.createElement('h2');
@@ -73,8 +68,7 @@ const questions = () => {
 	header.appendChild(difficultyLevelElementNode);
 	
 	//クイズ
-	const quizName = quizData[quizNum-1].question;
-	contents.textContent = quizName;
+	contents.textContent = quizData[quizNum-1].question;
 	
 	//選択肢
 	const correctAnswer = quizData[quizNum-1].correct_answer;
@@ -84,8 +78,6 @@ const questions = () => {
 	for (let i = 0; i < quizData[quizNum-1].incorrect_answers.length; i++) {
 		choices.push(quizData[quizNum-1].incorrect_answers[i]);	//不正解を取り出す
 	}
-	
-	
 	
 	
 	let choiceElementNode;
@@ -114,15 +106,19 @@ const result = () => {
 	const messageName = 'あなたの正答数は' + answerNum + 'です！！';
 	const messageTextNode = document.createTextNode(messageName);
 	messageElementNode.appendChild(messageTextNode);
+	
+	const header = document.getElementById('header');
 	header.appendChild(messageElementNode);
 	
 	const contents = document.getElementById('contents');
 	contents.textContent = '再度チャレンジしたい場合は以下をクリック！！';
 	
-	homeElementNode = document.createElement('button');
+	const homeElementNode = document.createElement('button');
 	homeElementNode.setAttribute('onclick', 'window.location.reload(true);');
-	homeTextNode = document.createTextNode('ホームに戻る');
+	const homeTextNode = document.createTextNode('ホームに戻る');
 	homeElementNode.appendChild(homeTextNode);
+	
+	const buttons = document.getElementById('buttons');
 	buttons.appendChild(homeElementNode);
 }
 
